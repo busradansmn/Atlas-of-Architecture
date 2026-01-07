@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "687793669558",
+    "project_id": "mimari-atlasai",
+    "storage_bucket": "mimari-atlasai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687793669558:android:ed52c715b2fb8850992d17",
+        "android_client_info": {
+          "package_name": "com.example.mimari_atlas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtDPifL59GDmRHFLTVPk5nDZTn9Ral8M4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
