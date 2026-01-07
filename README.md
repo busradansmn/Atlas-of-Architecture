@@ -1,4 +1,4 @@
-# 🏛️ Mimarlık Uygulaması (Riverpod + Dio)
+# Mimarlık Uygulaması (Riverpod + Dio)
 
 AI destekli mimarlık haberleri, makaleler ve soru-cevap platformu. **Riverpod** state management ve **Dio** HTTP client kullanılarak geliştirilmiştir.
 
@@ -20,7 +20,7 @@ ve sektörü takip edebileceği bir uygulama geliştirilmiştir.
 -  **Sade & Modern UI**
     - Kullanıcı odaklı ve erişilebilir arayüz
 
-## 📱 Ekranlar
+##  Ekranlar
 
 <p align="center">
   <img src="assets/1.jpg" width="700" />
@@ -31,7 +31,7 @@ ve sektörü takip edebileceği bir uygulama geliştirilmiştir.
 </p>
 
 
-## 🛠️ Teknolojiler
+## Teknolojiler
 
 - **Frontend**: Flutter, Dart
 - **State Management**: **Riverpod**
@@ -43,7 +43,7 @@ ve sektörü takip edebileceği bir uygulama geliştirilmiştir.
 - **AI**: Google Gemini API
 
 
-## 📄 Lisans
+## Lisans
 
 MIT Lisansı - Eğitim amaçlıdır.
 
