@@ -95,8 +95,8 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: r.wp(80),
-                  height: r.wp(80),
+                  width: r.wp(30),
+                  height: r.wp(30),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -108,7 +108,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                   ),
                   child: Icon(
                     Icons.person_add_outlined,
-                    size: r.wp(35),
+                    size: r.wp(12),
                     color: AppTheme.primaryPurple,
                   ),
                 ),
@@ -234,7 +234,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                 r.verticalSpaceMedium,
                 SizedBox(
                   width: double.infinity,
-                  height: r.wp(30),
+                  height: r.wp(10),
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _handleRegister,
                     style: ElevatedButton.styleFrom(
@@ -245,8 +245,8 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                     ),
                     child: _isLoading
                         ? SizedBox(
-                            width: r.wp(20),
-                            height: r.wp(20),
+                      width: r.wp(10),
+                      height: r.wp(10),
                             child: const CircularProgressIndicator(
                               color: Colors.white,
                               strokeWidth: 2,
