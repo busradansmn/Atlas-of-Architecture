@@ -9,8 +9,10 @@ class TrendsScreen extends StatelessWidget {
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     try {
-      if (!await launchUrl(uri,
-        mode: LaunchMode.externalApplication,)) {
+      if (!await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      )) {
         throw Exception('URL açılamadı: $url');
       }
     } catch (e) {
@@ -26,13 +28,11 @@ class TrendsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Son dakika haberleri
             NewsSections.buildBreakingNewsSection(
               news: NewsData.breakingNews,
               onNewsClick: _launchURL,
             ),
             const SizedBox(height: 16),
-            // Diğer haberler
             NewsSections.buildOtherNewsSection(
               news: NewsData.otherNews,
               onNewsClick: _launchURL,

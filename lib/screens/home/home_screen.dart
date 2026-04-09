@@ -2,107 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../features/data/models/chat_message.dart';
+import '../../presentation/providers/providers.dart';
 import '../../utils/app_theme.dart';
-
-// Chat Message Model
-class ChatMessage {
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-
-  ChatMessage({
-    required this.text,
-    required this.isUser,
-    required this.timestamp,
-  });
-}
-
-// Chat Provider
-class ChatNotifier extends StateNotifier<List<ChatMessage>> {
-  ChatNotifier() : super([]) {
-    // Hoş geldin mesajı
-    state = [
-      ChatMessage(
-        text: 'Merhaba! Ben Mimari Atlas AI asistanınızım. Size mimarlık konusunda nasıl yardımcı olabilirim?',
-        isUser: false,
-        timestamp: DateTime.now(),
-      ),
-    ];
-  }
-
-  Future<void> sendMessage(String message) async {
-    // Kullanıcı mesajı
-    state = [
-      ...state,
-      ChatMessage(
-        text: message,
-        isUser: true,
-        timestamp: DateTime.now(),
-      ),
-    ];
-
-    try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-
-      if (apiKey == null || apiKey.isEmpty) {
-        throw Exception('API anahtarı bulunamadı!');
-      }
-
-      final model = GenerativeModel(
-        model: 'gemini-2.5-flash', // ✅ Çalışan model
-        apiKey: apiKey,
-      );
-
-      // ✅ Basitleştirilmiş prompt yapısı
-      final prompt = '''Sen mimarlık konusunda uzman bir AI asistansın.
-Mimarlık öğrencilerine ve profesyonellere yardımcı oluyorsun.
-Mimari tasarım, mimarlık tarihi, yapı teknolojileri, ünlü mimarlar,
-mimari akımlar ve stiller konusunda bilgilisin.
-
-Cevaplarını Türkçe, anlaşılır, kısa ve profesyonel ver.
-Teknik terimleri açıkla.
-
-Soru: $message''';
-
-      // ✅ İkinci dosyadaki gibi çağrı
-      final icerik = [Content.text(prompt)];
-      final response = await model.generateContent(icerik);
-
-      state = [
-        ...state,
-        ChatMessage(
-          text: response.text ?? 'Üzgünüm, cevap oluşturamadım.',
-          isUser: false,
-          timestamp: DateTime.now(),
-        ),
-      ];
-    } catch (e) {
-      // ✅ Daha detaylı hata mesajı
-      state = [
-        ...state,
-        ChatMessage(
-          text: 'Hata: ${e.toString()}\n\nLütfen API anahtarınızı kontrol edin.',
-          isUser: false,
-          timestamp: DateTime.now(),
-        ),
-      ];
-    }
-  }
-
-  void clearChat() {
-    state = [
-      ChatMessage(
-        text: 'Merhaba! Ben Mimari Atlas AI asistanınızım. Size mimarlık konusunda nasıl yardımcı olabilirim?',
-        isUser: false,
-        timestamp: DateTime.now(),
-      ),
-    ];
-  }
-}
-
-final chatProvider = StateNotifierProvider<ChatNotifier, List<ChatMessage>>((ref) {
-  return ChatNotifier();
-});
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -160,30 +62,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Column(
       children: [
-        // Chat Header
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
+          decoration: _buildBoxDecoration(),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppTheme.primaryPurple.withOpacity(0.2),
-                      AppTheme.secondaryPurple.withOpacity(0.1),
-                    ],
-                  ),
+                  gradient: _buildLinearGradient(),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -215,83 +102,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                color: AppTheme.textLight,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Sohbeti Temizle'),
-                      content: const Text('Tüm mesajları silmek istediğinize emin misiniz?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('İptal'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref.read(chatProvider.notifier).clearChat();
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Temizle'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              _buildIconButtonDelete(context),
             ],
           ),
         ),
-
-        // Messages List
         Expanded(
           child: messages.isEmpty
               ? const Center(
-            child: Text('Henüz mesaj yok'),
-          )
+                  child: Text('Henüz mesaj yok'),
+                )
               : ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(16),
-            itemCount: messages.length,
-            itemBuilder: (context, index) {
-              final message = messages[index];
-              return _buildMessageBubble(message);
-            },
-          ),
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    return _buildMessageBubble(message);
+                  },
+                ),
         ),
-
-        // Loading Indicator
-        if (_isLoading)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppTheme.primaryPurple,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'AI düşünüyor...',
-                  style: TextStyle(
-                    color: AppTheme.textLight,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-        // Input Field
+        if (_isLoading) _buildProgressIndicator(),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -307,44 +137,133 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'Mesajınızı yazın...',
-                    filled: true,
-                    fillColor: AppTheme.backgroundPurple,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                  maxLines: null,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _sendMessage(),
-                ),
+                child: _buildTextMessage(),
               ),
               const SizedBox(width: 8),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppTheme.primaryPurple,
-                      AppTheme.secondaryPurple,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.send, color: Colors.white),
-                  onPressed: _isLoading ? null : _sendMessage,
-                ),
+              _buildSendIcon(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _buildSendIcon() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            AppTheme.primaryPurple,
+            AppTheme.secondaryPurple,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.send, color: Colors.white),
+        onPressed: _isLoading ? null : _sendMessage,
+      ),
+    );
+  }
+
+  TextField _buildTextMessage() {
+    return TextField(
+      controller: _controller,
+      decoration: InputDecoration(
+        hintText: 'Mesajınızı yazın...',
+        filled: true,
+        fillColor: AppTheme.backgroundPurple,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
+      ),
+      maxLines: null,
+      textInputAction: TextInputAction.send,
+      onSubmitted: (_) => _sendMessage(),
+    );
+  }
+
+  Container _buildProgressIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                AppTheme.primaryPurple,
+              ),
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'AI düşünüyor...',
+            style: TextStyle(
+              color: AppTheme.textLight,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconButton _buildIconButtonDelete(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete_outline),
+      color: AppTheme.textLight,
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Sohbeti Temizle'),
+            content:
+                const Text('Tüm mesajları silmek istediğinize emin misiniz?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('İptal'),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(chatProvider.notifier).clearChat();
+                  Navigator.pop(context);
+                },
+                child: const Text('Temizle'),
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  LinearGradient _buildLinearGradient() {
+    return LinearGradient(
+      colors: [
+        AppTheme.primaryPurple.withOpacity(0.2),
+        AppTheme.secondaryPurple.withOpacity(0.1),
+      ],
+    );
+  }
+
+  BoxDecoration _buildBoxDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
         ),
       ],
     );
@@ -362,11 +281,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         decoration: BoxDecoration(
           gradient: message.isUser
               ? const LinearGradient(
-            colors: [
-              AppTheme.primaryPurple,
-              AppTheme.secondaryPurple,
-            ],
-          )
+                  colors: [
+                    AppTheme.primaryPurple,
+                    AppTheme.secondaryPurple,
+                  ],
+                )
               : null,
           color: message.isUser ? null : Colors.white,
           borderRadius: BorderRadius.circular(16),

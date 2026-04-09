@@ -4,12 +4,10 @@ import '../../features/data/models/auth_result.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Mevcut kullanıcıyı al
   User? get currentUser => _auth.currentUser;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Kayıt ol
   Future<AuthResult> signUp({
     required String name,
     required String email,
@@ -34,7 +32,6 @@ class AuthService {
         password: password,
       );
 
-      // Kullanıcı adını güncelle
       await userCredential.user?.updateDisplayName(name);
       await userCredential.user?.reload();
 
@@ -70,7 +67,6 @@ class AuthService {
     }
   }
 
-  // Giriş yap
   Future<AuthResult> signIn({
     required String email,
     required String password,
@@ -123,12 +119,10 @@ class AuthService {
     }
   }
 
-  // Çıkış yap
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
-  // Şifre sıfırlama e-postası gönder
   Future<AuthResult> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

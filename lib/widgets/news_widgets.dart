@@ -19,7 +19,6 @@ class NewsCard extends StatelessWidget {
     final r = context.responsive;
 
     if (isBreaking) {
-      //Son dakika
       return GestureDetector(
         onTap: onTap,
         child: Container(
@@ -128,7 +127,6 @@ class NewsCard extends StatelessWidget {
         ),
       );
     } else {
-      // normal haberler
       return GestureDetector(
         onTap: onTap,
         child: Container(
@@ -189,8 +187,7 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           news.summary,
                           style: TextStyle(
-                              fontSize: r.sp(16),
-                              color: Colors.grey[600]),
+                              fontSize: r.sp(16), color: Colors.grey[600]),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -199,8 +196,7 @@ class NewsCard extends StatelessWidget {
                       Row(
                         children: [
                           Icon(Icons.article_outlined,
-                              size: r.wp(12),
-                              color: Colors.grey[500]),
+                              size: r.wp(12), color: Colors.grey[500]),
                           r.verticalSpaceSmall,
                           Expanded(
                             child: Text(

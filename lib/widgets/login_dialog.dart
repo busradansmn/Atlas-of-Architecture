@@ -33,9 +33,9 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
       });
 
       final result = await ref.read(userProvider.notifier).signIn(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
 
       if (mounted) {
         setState(() {
@@ -113,7 +113,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   ),
                 ),
                 r.verticalSpaceLarge,
-                 Text(
+                Text(
                   'Giriş Yap',
                   style: TextStyle(
                     fontSize: r.sp(20),
@@ -122,7 +122,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   ),
                 ),
                 r.verticalSpaceSmall,
-                 Text(
+                Text(
                   'Hesabınıza giriş yapın',
                   style: TextStyle(
                     fontSize: r.sp(16),
@@ -136,7 +136,8 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: 'E-posta',
-                    prefixIcon: Icon(Icons.email, color: AppTheme.primaryPurple),
+                    prefixIcon:
+                        Icon(Icons.email, color: AppTheme.primaryPurple),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -154,10 +155,13 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: 'Şifre',
-                    prefixIcon: const Icon(Icons.lock, color: AppTheme.primaryPurple),
+                    prefixIcon:
+                        const Icon(Icons.lock, color: AppTheme.primaryPurple),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: AppTheme.primaryPurple,
                       ),
                       onPressed: () {
@@ -191,28 +195,28 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                     ),
                     child: _isLoading
                         ? SizedBox(
-                      width: r.wp(10),
-                      height: r.wp(10),
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            width: r.wp(10),
+                            height: r.wp(10),
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : Text(
-                      'Giriş Yap',
-                      style: TextStyle(
-                        fontSize: r.sp(16),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                            'Giriş Yap',
+                            style: TextStyle(
+                              fontSize: r.sp(16),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
                 r.verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text(
+                    Text(
                       'Hesabınız yok mu? ',
                       style: TextStyle(
                         color: AppTheme.textLight,

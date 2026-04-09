@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import '../features/data/models/news_item.dart';
 import 'news_widgets.dart';
 
-/// Haber bölümlerini yöneten ana widget
 class NewsSections {
-
   static Widget buildBreakingNewsSection({
     required List<NewsItem> news,
     required Function(String) onNewsClick,
@@ -20,7 +18,8 @@ class NewsSections {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(4),
@@ -78,7 +77,6 @@ class NewsSections {
           ),
         ),
         const SizedBox(height: 12),
-        // 2 sütunlu grid
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: GridView.builder(

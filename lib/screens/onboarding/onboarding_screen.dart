@@ -27,19 +27,19 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       icon: Icons.architecture,
       title: 'Mimari Atlas\'a Hoş Geldiniz',
       description:
-      'Mimarlık dünyasında yolculuğunuza başlayın. Yapay zeka destekli asistanımızla mimarlık sorularınıza anında cevap alın.',
+          'Mimarlık dünyasında yolculuğunuza başlayın. Yapay zeka destekli asistanımızla mimarlık sorularınıza anında cevap alın.',
     ),
     OnboardingData(
       icon: Icons.chat_bubble_outline,
       title: 'AI Destekli Sohbet',
       description:
-      'Mimari tasarım, tarih, teoriler ve teknik sorularınız için AI asistanınızla konuşun. Her zaman yanınızda!',
+          'Mimari tasarım, tarih, teoriler ve teknik sorularınız için AI asistanınızla konuşun. Her zaman yanınızda!',
     ),
     OnboardingData(
       icon: Icons.trending_up,
       title: 'Trendleri Takip Edin',
       description:
-      'Mimarlık dünyasındaki son trendleri keşfedin, ilham alın ve bilgilerinizi güncel tutun.',
+          'Mimarlık dünyasındaki son trendleri keşfedin, ilham alın ve bilgilerinizi güncel tutun.',
     ),
   ];
 
@@ -77,15 +77,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   Future<void> _completeOnboarding() async {
-    // Onboarding'i tamamlandı olarak işaretle
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenOnboarding', true);
 
     if (mounted) {
-      // MainScreen'e git ve geri dönüşü engelle
       Navigator.of(context).pushNamedAndRemoveUntil(
         '/main',
-            (route) => false, // Tüm önceki route'ları temizle
+        (route) => false,
       );
     }
   }
@@ -107,25 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: _completeOnboarding,
-                  child: const Text(
-                    'Geç',
-                    style: TextStyle(
-                      color: AppTheme.primaryPurple,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // PageView
+            _buildGecButton(),
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -141,8 +121,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 },
               ),
             ),
-
-            // Page indicator
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: SmoothPageIndicator(
@@ -157,55 +135,77 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
               ),
             ),
-
-            // Next/Start button with animation
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: AnimatedBuilder(
-                animation: _bounceAnimation,
-                builder: (context, child) {
-                  return Transform.translate(
-                    offset: Offset(0, _bounceAnimation.value),
-                    child: child,
-                  );
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  height: r.wp(10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _autoScrollTimer?.cancel();
-                      _buttonAnimationTimer?.cancel();
-                      _bounceController.stop();
-
-                      if (_currentPage == _pages.length - 1) {
-                        _completeOnboarding();
-                      } else {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      _currentPage == _pages.length - 1 ? 'Başla' : 'İleri',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
+            _buildNextButton(r)
           ],
+        ),
+      ),
+    );
+  }
+
+  Padding _buildGecButton() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: TextButton(
+          onPressed: _completeOnboarding,
+          child: const Text(
+            'Geç',
+            style: TextStyle(
+              color: AppTheme.primaryPurple,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildNextButton(ResponsiveSize r) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: AnimatedBuilder(
+        animation: _bounceAnimation,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(0, _bounceAnimation.value),
+            child: child,
+          );
+        },
+        child: SizedBox(
+          width: double.infinity,
+          height: r.wp(10),
+          child: ElevatedButton(
+            onPressed: () {
+              _autoScrollTimer?.cancel();
+              _buttonAnimationTimer?.cancel();
+              _bounceController.stop();
+
+              if (_currentPage == _pages.length - 1) {
+                _completeOnboarding();
+              } else {
+                _pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryPurple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: Text(
+              _currentPage == _pages.length - 1 ? 'Başla' : 'İleri',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -245,8 +245,8 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                     ),
                     child: _isLoading
                         ? SizedBox(
-                      width: r.wp(10),
-                      height: r.wp(10),
+                            width: r.wp(10),
+                            height: r.wp(10),
                             child: const CircularProgressIndicator(
                               color: Colors.white,
                               strokeWidth: 2,

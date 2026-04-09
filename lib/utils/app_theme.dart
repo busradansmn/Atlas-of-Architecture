@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Mor tonları renk paleti
   static const Color primaryPurple = Color(0xFF6B4CE6);
   static const Color secondaryPurple = Color(0xFF8B6FE8);
   static const Color lightPurple = Color(0xFFB8A5F0);
@@ -23,7 +22,6 @@ class AppTheme {
       surface: white,
       background: backgroundPurple,
     ),
-
     appBarTheme: const AppBarTheme(
       backgroundColor: primaryPurple,
       elevation: 0,
@@ -35,7 +33,6 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
     ),
-
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryPurple,
@@ -51,7 +48,6 @@ class AppTheme {
         ),
       ),
     ),
-
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: white,
@@ -70,7 +66,6 @@ class AppTheme {
       hintStyle: TextStyle(color: textLight),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     ),
-
     cardTheme: CardThemeData(
       color: cardBackground,
       elevation: 2,
@@ -78,7 +73,6 @@ class AppTheme {
         borderRadius: BorderRadius.circular(16),
       ),
     ),
-
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: white,
       selectedItemColor: primaryPurple,
@@ -87,7 +81,6 @@ class AppTheme {
       elevation: 8,
       selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
     ),
-
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
         fontSize: 32,

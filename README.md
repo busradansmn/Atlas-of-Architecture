@@ -1,8 +1,9 @@
-# Mimarlık Uygulaması (Riverpod + Dio)
+# Mimarlık Uygulaması
 
-AI destekli mimarlık haberleri, makaleler ve soru-cevap platformu. **Riverpod** state management ve **Dio** HTTP client kullanılarak geliştirilmiştir.
+AI destekli mimarlık haberleri, makaleler ve soru-cevap platformu. **Riverpod** state management
+kullanılarak geliştirilmiştir.
 
-##  Neden Atlas of Architecture?
+## Neden Atlas of Architecture?
 
 Mimarlık alanında bilgiye hızlı ulaşma ihtiyacı ve  
 AI teknolojilerinin sunduğu yeni olanaklar bir araya getirilerek  
@@ -11,16 +12,16 @@ ve sektörü takip edebileceği bir uygulama geliştirilmiştir.
 
 ## Özellikler
 
--  **AI Mimari Chat**
+- **AI Mimari Chat**
     - Mimari kavramlar, proje süreçleri ve teknik sorular için yapay zekâ destekli sohbet
--  **Trend Mimarlık Haberleri**
+- **Trend Mimarlık Haberleri**
     - Güncel mimarlık haberleri ve sektörel gelişmeler
--  **Öğrenci & Profesyonel Odaklı**
+- **Öğrenci & Profesyonel Odaklı**
     - Mimarlık öğrencileri ve mimarlar için özel tasarım
--  **Sade & Modern UI**
+- **Sade & Modern UI**
     - Kullanıcı odaklı ve erişilebilir arayüz
 
-##  Ekranlar
+## Ekranlar
 
 <p align="center">
   <img src="assets/1.jpg" width="700" />
@@ -30,18 +31,15 @@ ve sektörü takip edebileceği bir uygulama geliştirilmiştir.
   <img src="assets/2.jpg" width="700" />
 </p>
 
-
 ## Teknolojiler
 
 - **Frontend**: Flutter, Dart
 - **State Management**: **Riverpod**
-- **HTTP Client**: **Dio**
 - **Backend**: Firebase
     - Authentication (Email/Password)
     - Firestore Database
     - Cloud Storage
 - **AI**: Google Gemini API
-
 
 ## Lisans
 

@@ -33,13 +33,6 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward();
-
-    // Otomatik geçiş (opsiyonel - butona basmak yerine)
-    // Future.delayed(const Duration(seconds: 3), () {
-    //   if (mounted) {
-    //     _goToOnboarding();
-    //   }
-    // });
   }
 
   @override
@@ -58,17 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.primaryPurple,
-              AppTheme.secondaryPurple,
-              AppTheme.accentPurple,
-            ],
-          ),
-        ),
+        decoration: _buildBoxDecoration(),
         child: SafeArea(
           child: Center(
             child: AnimatedBuilder(
@@ -81,37 +64,10 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Logo Container
-                        Container(
-                          width: r.wp(30),
-                          height: r.wp(30),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(r.wp(7.5)),
-                          ),
-                          child: Icon(
-                            Icons.architecture,
-                            size: r.wp(15),
-                            color: Colors.white,
-                          ),
-                        ),
+                        _buildContainerLogo(r),
                         r.verticalSpaceMedium,
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: r.wp(10)),
-                          child: Text(
-                            'Mimari Atlas',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: r.sp(36),
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
+                        _buildTitle(r),
                         r.verticalSpaceSmall,
-
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: r.wp(10)),
                           child: Text(
@@ -125,30 +81,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                         r.verticalSpaceExtraLarge,
-
-                        SizedBox(
-                          width: r.wp(45).clamp(160.0, 220.0),
-                          height: r.hp(6).clamp(48.0, 60.0),
-                          child: ElevatedButton(
-                            onPressed: _goToOnboarding,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: AppTheme.primaryPurple,
-                              elevation: 8,
-                              shadowColor: Colors.black.withOpacity(0.3),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            child: Text(
-                              'Başla',
-                              style: TextStyle(
-                                fontSize: r.sp(18),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
+                        _buildStartButton(r),
                       ],
                     ),
                   ),
@@ -157,6 +90,78 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  SizedBox _buildStartButton(ResponsiveSize r) {
+    return SizedBox(
+      width: r.wp(45).clamp(160.0, 220.0),
+      height: r.hp(6).clamp(48.0, 60.0),
+      child: ElevatedButton(
+        onPressed: _goToOnboarding,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: AppTheme.primaryPurple,
+          elevation: 8,
+          shadowColor: Colors.black.withOpacity(0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Text(
+          'Başla',
+          style: TextStyle(
+            fontSize: r.sp(18),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildTitle(ResponsiveSize r) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: r.wp(10)),
+      child: Text(
+        'Mimari Atlas',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: r.sp(36),
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
+  }
+
+  Container _buildContainerLogo(ResponsiveSize r) {
+    return Container(
+      width: r.wp(30),
+      height: r.wp(30),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(r.wp(7.5)),
+      ),
+      child: Icon(
+        Icons.architecture,
+        size: r.wp(15),
+        color: Colors.white,
+      ),
+    );
+  }
+
+  BoxDecoration _buildBoxDecoration() {
+    return const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          AppTheme.primaryPurple,
+          AppTheme.secondaryPurple,
+          AppTheme.accentPurple,
+        ],
       ),
     );
   }

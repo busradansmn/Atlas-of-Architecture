@@ -6,8 +6,7 @@ import '../../widgets/login_dialog.dart';
 import '../saved/saved_screen.dart';
 import '../trends/trends_screen.dart';
 import 'home_screen.dart';
-
-
+import 'package:mimari_atlas/features/data/models/user_model.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -23,7 +22,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Kullanıcı giriş yapmamışsa login dialog göster
     final user = ref.read(userProvider);
     if (!_hasShownLoginDialog && !user.isAuthenticated && !user.isGuest) {
       _hasShownLoginDialog = true;
@@ -58,16 +56,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       appBar: AppBar(
         title: const Text('Mimari Atlas'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              if (user.isGuest || !user.isAuthenticated) {
-                _showLoginDialog();
-              } else {
-                _showUserMenu();
-              }
-            },
-          ),
+          _buildIconButtonProfile(user),
         ],
       ),
       body: IndexedStack(
@@ -84,30 +73,47 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) {
-            ref.read(bottomNavProvider.notifier).state = index;
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Ana Sayfa',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.trending_up_outlined),
-              activeIcon: Icon(Icons.trending_up),
-              label: 'Trendler',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_border),
-              activeIcon: Icon(Icons.bookmark),
-              label: 'Kaydedilenler',
-            ),
-          ],
-        ),
+        child: _buildBottomNavigationBar(currentIndex),
       ),
+    );
+  }
+
+  BottomNavigationBar _buildBottomNavigationBar(int currentIndex) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: (index) {
+        ref.read(bottomNavProvider.notifier).state = index;
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: 'Ana Sayfa',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.trending_up_outlined),
+          activeIcon: Icon(Icons.trending_up),
+          label: 'Trendler',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark_border),
+          activeIcon: Icon(Icons.bookmark),
+          label: 'Kaydedilenler',
+        ),
+      ],
+    );
+  }
+
+  IconButton _buildIconButtonProfile(UserModel user) {
+    return IconButton(
+      icon: const Icon(Icons.person),
+      onPressed: () {
+        if (user.isGuest || !user.isAuthenticated) {
+          _showLoginDialog();
+        } else {
+          _showUserMenu();
+        }
+      },
     );
   }
 
